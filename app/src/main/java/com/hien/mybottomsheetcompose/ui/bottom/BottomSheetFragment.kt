@@ -19,8 +19,7 @@ class BottomSheetFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private lateinit var bottomCollectionAdapter: BottomCollectionAdapter
-    private lateinit var viewPager: ViewPager2
+    private lateinit var viewPager: BottomSheetViewPager
     private lateinit var tabLayout: TabLayout
 
     override fun onCreateView(
@@ -28,33 +27,45 @@ class BottomSheetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
-        viewPager = binding.pagerBottom
+        viewPager = binding.bottomPager
         tabLayout = binding.tabLayoutBottom
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bottomCollectionAdapter = BottomCollectionAdapter(this)
-        viewPager.adapter = bottomCollectionAdapter
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+        setupTabs()
+    }
+
+    private fun setupTabs() {
+        val bottomViewPagerAdapter = BottomViewPagerAdapter()
+        viewPager.viewPager.isUserInputEnabled = false
+        viewPager.adapter = bottomViewPagerAdapter
+        viewPager.offscreenPageLimit = bottomViewPagerAdapter.itemCount
+        viewPager.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+
+            }
+        })
+        TabLayoutMediator(
+            tabLayout,
+            viewPager.viewPager
+        ) { tab, position ->
             tab.text = "Tab ${(position + 1)}"
         }.attach()
     }
 
-}
+    private inner class BottomViewPagerAdapter() : FragmentStateAdapter(childFragmentManager, lifecycle) {
 
-class BottomCollectionAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
-
-    override fun getItemCount(): Int = 2
-
-    override fun createFragment(position: Int): Fragment {
-        return when (position) {
+        override fun createFragment(position: Int): Fragment = when (position) {
             0 -> BottomFirstFragment()
             1 -> BottomSecondFragment()
-            else -> {
-                BottomFirstFragment()
-            }
+            2 -> BottomFirstFragment()
+            else -> throw IllegalArgumentException("Illegal fragment position: $position")
         }
+
+        override fun getItemCount(): Int = 3
     }
+
 }
+

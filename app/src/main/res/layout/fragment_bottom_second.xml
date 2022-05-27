@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.bottom.BottomSecondFragment">
+    android:layout_height="wrap_content"
+    tools:context=".ui.bottom.BottomSecondFragment"
+    android:minHeight="300dp"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Second bottom fragment" />
+        android:layout_height="300dp"
+        android:text="Second bottom fragment - Text 1" />
 
-</FrameLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:text="Second bottom fragment - Text 2" />
+
+</LinearLayout>
